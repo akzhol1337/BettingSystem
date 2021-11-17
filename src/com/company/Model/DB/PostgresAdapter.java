@@ -5,6 +5,10 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class PostgresAdapter implements IPostgresAdapter{
+
+    public PostgresAdapter() {
+    }
+
     @Override
     public Connection getConnection() throws SQLException, ClassNotFoundException {
         String connectionURL = "jdbc:postgresql://localhost:5432/BettingSystem";
