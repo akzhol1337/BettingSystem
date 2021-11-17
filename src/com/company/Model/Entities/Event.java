@@ -9,17 +9,19 @@ public class Event {
     private Date dateOfMatch;
     private double coeffWin1;
     private double coeffWin2;
+    private double coeffDraw;
     private String location;
     private int moneyLimit;
     private String league;
 
-    public Event(String category, String firstPlayer, String secondPlayer, Date dateOfMatch, double coeffWin1, double coeffWin2, String location, int moneyLimit, String league) {
+    public Event(String category, String firstPlayer, String secondPlayer, Date dateOfMatch, double coeffWin1, double coeffWin2, double coeffDraw, String location, int moneyLimit, String league) {
         this.category = category;
         this.firstPlayer = firstPlayer;
         this.secondPlayer = secondPlayer;
         this.dateOfMatch = dateOfMatch;
         this.coeffWin1 = coeffWin1;
         this.coeffWin2 = coeffWin2;
+        this.coeffDraw = coeffDraw;
         this.location = location;
         this.moneyLimit = moneyLimit;
         this.league = league;
@@ -73,6 +75,14 @@ public class Event {
         this.coeffWin2 = coeffWin2;
     }
 
+    public double getCoeffDraw() {
+        return coeffDraw;
+    }
+
+    public void setCoeffDraw(double coeffDraw) {
+        this.coeffDraw = coeffDraw;
+    }
+
     public String getLocation() {
         return location;
     }
@@ -95,5 +105,21 @@ public class Event {
 
     public void setLeague(String league) {
         this.league = league;
+    }
+
+    @Override
+    public String toString() {
+        return "Event{" +
+                "category='" + category + '\'' +
+                ", firstPlayer='" + firstPlayer + '\'' +
+                ", secondPlayer='" + secondPlayer + '\'' +
+                ", dateOfMatch=" + dateOfMatch +
+                ", coeffWin1=" + coeffWin1 +
+                ", coeffWin2=" + coeffWin2 +
+                ", coeffDraw=" + coeffDraw +
+                ", location='" + location + '\'' +
+                ", moneyLimit=" + moneyLimit +
+                ", league='" + league + '\'' +
+                '}';
     }
 }

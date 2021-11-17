@@ -1,5 +1,6 @@
 package com.company.Controller;
 
+import com.company.Model.Entities.Event;
 import com.company.Model.Entities.User;
 import com.company.Model.Repository.IPostgreRepository;
 
@@ -22,5 +23,15 @@ public class PostgreController implements IPostgreController{
 
     public boolean register(String email, String password, int age) throws Exception{
         return repo.register(email, password, age);
+    }
+
+    @Override
+    public ArrayList<Event> getAllEvents() throws Exception {
+        return repo.getAllEvents();
+    }
+
+    @Override
+    public ArrayList<Event> getEventsByCategory(String category) throws Exception {
+        return repo.getEventsByCategory(category);
     }
 }

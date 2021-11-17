@@ -2,6 +2,7 @@ package com.company.Model.Repository;
 
 
 
+import com.company.Model.Entities.Event;
 import com.company.Model.Entities.User;
 import com.company.Model.DB.IPostgresAdapter;
 
@@ -110,6 +111,63 @@ public class PostgreRepository implements IPostgreRepository {
 
             return true;
 
+
+        } catch(Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
+    @Override
+    public ArrayList<Event> getAllEvents() throws Exception {
+        Connection con = null;
+        Statement st = null;
+        ResultSet rs = null;
+
+        ArrayList < Event > events = new ArrayList<>();
+
+        try {
+            con = db.getConnection();
+            st = con.createStatement();
+            rs = st.executeQuery("SELECT * from events");
+
+
+
+            while(rs.next()){
+                events.add(new Event(rs.getString(1), rs.getString(2), rs.getString(3), rs.getDate(4), rs.getDouble(5), rs.getDouble(6), rs.getDouble(7), rs.getString(8), rs.getInt(9), rs.getString(10)));
+            }
+
+            st.close();
+            return events;
+
+        } catch(Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
+    @Override
+    public ArrayList<Event> getEventsByCategory(String category) throws Exception {
+        Connection con = null;
+        PreparedStatement st = null;
+        ResultSet rs = null;
+
+        ArrayList < Event > events = new ArrayList<>();
+
+        try {
+            con = db.getConnection();
+
+            st = con.prepareStatement("SELECT * from events where category=?");
+            st.setString(1, category);
+
+            rs = st.executeQuery();
+
+            while(rs.next()){
+                events.add(new Event(rs.getString(1), rs.getString(2), rs.getString(3), rs.getDate(4), rs.getDouble(5), rs.getDouble(6), rs.getDouble(7), rs.getString(8), rs.getInt(9), rs.getString(10)));
+            }
+
+            st.close();
+            return events;
 
         } catch(Exception e) {
             e.printStackTrace();
