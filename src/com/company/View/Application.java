@@ -53,14 +53,13 @@ public class Application {
     }
 
     void login() throws Exception {
-        String email = in.next(), pass = in.next();
-        boolean successfully_login = controller.login(email, pass);
-        System.out.println( successfully_login ? "SUCCESS" : "FAIL" );
-
-        if(!successfully_login) return;
-
         while(true) {
             try {
+                String email = in.next(), pass = in.next();
+                boolean successfully_login = controller.login(email, pass);
+                System.out.println( successfully_login ? "SUCCESS" : "FAIL" );
+
+                if(!successfully_login) return;
                 events();
             } catch(Exception e){
                 System.out.println(e.getMessage());
@@ -70,43 +69,87 @@ public class Application {
 
     }
     void register() throws Exception {
-        String email = in.next(), pass = in.next();
-        int age = in.nextInt();
-        System.out.println( controller.register(email, pass, age) ? "SUCCESS" : "FAIL" );
+        try {
+            String email = in.next(), pass = in.next();
+            int age = in.nextInt();
+            System.out.println(controller.register(email, pass, age) ? "SUCCESS" : "FAIL");
+        } catch(Exception e){
+            System.out.println(e.getMessage());
+            throw e;
+        }
 
     }
 
     void events() throws Exception {
-        System.out.println("-----------------------");
-        System.out.println("1: Show all");
-        System.out.println("2: Show by Category");
-        System.out.println("#: Back");
+        while(true) {
+            try {
+                System.out.println("-----------------------");
+                System.out.println("1: Show all");
+                System.out.println("2: Show by Category");
+                System.out.println("#: Back");
 
-        int choice = in.nextInt();
+                int choice = in.nextInt();
 
-        switch (choice){
-            case 1:
-                showAllEvents();
-                break;
-            case 2:
-                showByCategory();
-                break;
-            default:
+                switch (choice) {
+                    case 1 -> showAllEvents();
+                    case 2 -> {
+                        String category = in.next();
+                        showByCategory(category);
+                        System.out.println("1: Make a Bet");
+                        System.out.println("2: Filter by league");
+                        System.out.println("#: Return");
+                        int choice1 = in.nextInt();
 
+                        switch (choice1) {
+                            case 1 -> makeBet();
+                            case 2 -> showByLeague(category);
+                        }
+                    }
+                }
+            } catch(Exception e){
+                System.out.println(e.getMessage());
+                throw e;
+            }
         }
 
     }
 
     void showAllEvents() throws Exception {
-        for(Event event : controller.getAllEvents()){
-            System.out.println(event.toString());
+        try {
+            for (Event event : controller.getAllEvents()) {
+                System.out.println(event.toString());
+            }
+        } catch(Exception e) {
+            System.out.println(e.getMessage());
+            throw e;
         }
     }
 
-    void showByCategory() throws Exception {
-        String category = in.next();
-        for(Event event : controller.getEventsByCategory(category)){
-            System.out.println(event.toString());
+    void showByCategory(String category) throws Exception {
+        try {
+            for (Event event : controller.getEventsByCategory(category)) {
+                System.out.println(event.toString());
+            }
+        } catch(Exception e){
+            System.out.println(e.getMessage());
+            throw e;
         }
+    }
+
+    void showByLeague(String category) throws Exception{
+        try {
+            in.nextLine();
+            String league = in.nextLine();
+            for (Event event : controller.getEventsByLeague(category, league)) {
+                System.out.println(event.toString());
+            }
+        } catch(Exception e){
+            System.out.println(e.getMessage());
+            throw e;
+        }
+    }
+
+    void makeBet(){
+
     }
 }

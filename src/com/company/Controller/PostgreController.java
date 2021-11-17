@@ -34,4 +34,9 @@ public class PostgreController implements IPostgreController{
     public ArrayList<Event> getEventsByCategory(String category) throws Exception {
         return repo.getEventsByCategory(category);
     }
+
+    @Override
+    public ArrayList<Event> getEventsByLeague(String category, String league) throws Exception {
+        return repo.getEventsByLeague(category, league);
+    }
 }

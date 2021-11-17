@@ -174,4 +174,34 @@ public class PostgreRepository implements IPostgreRepository {
             throw e;
         }
     }
+
+    @Override
+    public ArrayList<Event> getEventsByLeague(String category, String league) throws Exception {
+        Connection con = null;
+        PreparedStatement st = null;
+        ResultSet rs = null;
+
+        ArrayList < Event > events = new ArrayList<>();
+
+        try {
+            con = db.getConnection();
+
+            st = con.prepareStatement("SELECT * from events where category=? AND league=?");
+            st.setString(1, category);
+            st.setString(2, league);
+
+            rs = st.executeQuery();
+
+            while(rs.next()){
+                events.add(new Event(rs.getString(1), rs.getString(2), rs.getString(3), rs.getDate(4), rs.getDouble(5), rs.getDouble(6), rs.getDouble(7), rs.getString(8), rs.getInt(9), rs.getString(10)));
+            }
+
+            st.close();
+            return events;
+
+        } catch(Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
+    }
 }
