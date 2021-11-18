@@ -39,4 +39,27 @@ public class PostgreController implements IPostgreController{
     public ArrayList<Event> getEventsByLeague(String category, String league) throws Exception {
         return repo.getEventsByLeague(category, league);
     }
+
+    @Override
+    public void changePassword(String ID, String newPassword) throws Exception {
+        repo.changePassword(ID, newPassword);
+    }
+
+    @Override
+    public ArrayList<User> leaderboard() throws Exception {
+        return repo.leaderboard();
+    }
+
+    @Override
+    public void makeOrdinaryBet(int amount, User user, int eventID) throws Exception {
+
+        if(amount > user.getBalance()){
+            System.out.println("Not enough money on balance!");
+            return;
+        }
+
+        repo.makeOrdinaryBet(amount, user.getID(), eventID, true);
+        user.setBalance(user.getBalance()-amount);
+        repo.changeBalance(amount, false, user.getID());
+    }
 }

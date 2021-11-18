@@ -54,20 +54,18 @@ public class Application {
     }
 
     void login() throws Exception {
-        while(true) {
-            try {
-                String email = in.next(), pass = in.next();
-                User successfully_login = controller.login(email, pass);
-                System.out.println( successfully_login != null ? "SUCCESS" : "FAIL" );
+        try {
+            String email = in.next(), pass = in.next();
+            User successfully_login = controller.login(email, pass);
+            System.out.println( successfully_login != null ? "SUCCESS" : "FAIL" );
 
-                if(successfully_login == null) return;
-                events(successfully_login);
-            } catch(Exception e){
-                System.out.println(e.getMessage());
-                throw e;
-            }
+            if(successfully_login == null) return;
+            events(successfully_login);
+
+        } catch(Exception e){
+            System.out.println(e.getMessage());
+            throw e;
         }
-
     }
     void register() throws Exception {
         try {
@@ -92,30 +90,41 @@ public class Application {
 
                 int choice = in.nextInt();
 
-                switch (choice) {
-                    case 1 -> myProfile(user);
-                    case 2 -> showAllEvents();
-                    case 3 -> {
-                        String category = in.next();
-                        showByCategory(category);
-                        System.out.println("1: Make a Bet");
-                        System.out.println("2: Filter by league");
-                        System.out.println("#: Return");
-                        int choice1 = in.nextInt();
+                if(choice == 1){
+                    myProfile(user);
+                } else if(choice == 2){
+                    showAllEvents();
+                    System.out.println("1: Make a bet");
+                    System.out.println("#: Return");
 
-                        switch (choice1) {
-                            case 1 -> makeBet();
-                            case 2 -> {
-                                showByLeague(category);
-                                System.out.println("1: Make a Bet");
-                                System.out.println("# Return");
+                    int choice1 = in.nextInt();
 
-                                int choice2 = in.nextInt();
+                    if(choice1 == 1){
+                         makeBet(user);
+                    }
 
-                                if(choice2 == 1) makeBet();
-                            }
+                } else if(choice == 3){
+                    String category = in.next();
+                    showByCategory(category);
+                    System.out.println("1: Make a Bet");
+                    System.out.println("2: Filter by league");
+                    System.out.println("#: Return");
+                    int choice1 = in.nextInt();
+
+                    switch (choice1) {
+                        case 1 -> makeBet(user);
+                        case 2 -> {
+                            showByLeague(category);
+                            System.out.println("1: Make a Bet");
+                            System.out.println("# Return");
+
+                            int choice2 = in.nextInt();
+
+                            if(choice2 == 1) makeBet(user);
                         }
                     }
+                } else {
+                    break;
                 }
             } catch(Exception e){
                 System.out.println(e.getMessage());
@@ -162,38 +171,46 @@ public class Application {
         }
     }
 
-    void makeBet(){
-
+    void makeBet(User user) throws Exception {
+        int eventID = in.nextInt();
+        int amount = in.nextInt();
+        controller.makeOrdinaryBet(amount, user, eventID);
     }
 
-    void myProfile(User user){
-        System.out.println("--------------------------------");
+    void myProfile(User user) throws Exception {
+        while(true) {
+            System.out.println("--------------------------------");
+            System.out.println("Hello, " + user.getName());
+            System.out.println("Rank: " + user.getRanking());
+            System.out.println("Balance: " + user.getBalance());
+            System.out.println("Profit: " + user.getProfit());
+            System.out.println();
+            System.out.println();
+            System.out.println("Total Bets: " + user.getTotalBets() + " Won: " + user.getBetsWon() + " Lose: " + (user.getTotalBets() - user.getBetsWon()));
 
-        System.out.println("Hello, " + user.getName());
-        System.out.println("Rank: " + user.getRanking());
-        System.out.println("Balance: " + user.getBalance());
-        System.out.println("Profit: " + user.getProfit());
-        System.out.println();
-        System.out.println();
-        System.out.println("Total Bets: " + user.getTotalBets() + " Won: " + user.getBetsWon() + " Lose: " + (user.getTotalBets() - user.getBetsWon()));
+            System.out.println("1: Change password");
+            System.out.println("2: See leaderboard");
+            System.out.println("# Return");
 
-        System.out.println("1: Change password");
-        System.out.println("2: See leaderboard");
-        System.out.println("# Return");
-
-        int choice = in.nextInt();
-
-        switch(choice) {
-            case 1 -> changePassword(user);
-            case 2 -> leaderboard();
+            int choice = in.nextInt();
+            if(choice == 1){
+                changePassword(user);
+            } else if(choice == 2){
+                leaderboard();
+            } else {
+                break;
+            }
         }
     }
 
-    void changePassword(User user){
-
+    void changePassword(User user) throws Exception {
+        String newPassword = in.next();
+        controller.changePassword(user.getID(), newPassword);
     }
 
-    void leaderboard(){
-
+    void leaderboard() throws Exception {
+        for(User user : controller.leaderboard()){
+            System.out.println(user.toString());
+        }
     }
 }

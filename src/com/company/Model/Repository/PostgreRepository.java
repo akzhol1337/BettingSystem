@@ -6,10 +6,7 @@ import com.company.Model.Entities.Event;
 import com.company.Model.Entities.User;
 import com.company.Model.DB.IPostgresAdapter;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 
 public class PostgreRepository implements IPostgreRepository {
@@ -132,10 +129,8 @@ public class PostgreRepository implements IPostgreRepository {
             st = con.createStatement();
             rs = st.executeQuery("SELECT * from events");
 
-
-
             while(rs.next()){
-                events.add(new Event(rs.getString(1), rs.getString(2), rs.getString(3), rs.getDate(4), rs.getDouble(5), rs.getDouble(6), rs.getDouble(7), rs.getString(8), rs.getInt(9), rs.getString(10)));
+                events.add(new Event(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getDate(5), rs.getDouble(6), rs.getDouble(7), rs.getDouble(8), rs.getString(9), rs.getInt(10), rs.getString(11)));
             }
 
             st.close();
@@ -164,7 +159,7 @@ public class PostgreRepository implements IPostgreRepository {
             rs = st.executeQuery();
 
             while(rs.next()){
-                events.add(new Event(rs.getString(1), rs.getString(2), rs.getString(3), rs.getDate(4), rs.getDouble(5), rs.getDouble(6), rs.getDouble(7), rs.getString(8), rs.getInt(9), rs.getString(10)));
+                events.add(new Event(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getDate(5), rs.getDouble(6), rs.getDouble(7), rs.getDouble(8), rs.getString(9), rs.getInt(10), rs.getString(11)));
             }
 
             st.close();
@@ -194,11 +189,107 @@ public class PostgreRepository implements IPostgreRepository {
             rs = st.executeQuery();
 
             while(rs.next()){
-                events.add(new Event(rs.getString(1), rs.getString(2), rs.getString(3), rs.getDate(4), rs.getDouble(5), rs.getDouble(6), rs.getDouble(7), rs.getString(8), rs.getInt(9), rs.getString(10)));
+                events.add(new Event(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getDate(5), rs.getDouble(6), rs.getDouble(7), rs.getDouble(8), rs.getString(9), rs.getInt(10), rs.getString(11)));
             }
 
             st.close();
             return events;
+
+        } catch(Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
+    @Override
+    public void changePassword(String ID, String newPassword) throws Exception {
+        Connection con = null;
+        PreparedStatement st = null;
+        ResultSet rs = null;
+
+        try {
+            con = db.getConnection();
+
+            st = con.prepareStatement("UPDATE users SET password = ? WHERE id = ?");
+            st.setString(1, newPassword);
+            st.setString(2, ID);
+
+            st.executeUpdate();
+            st.close();
+        } catch(Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
+    @Override
+    public ArrayList<User> leaderboard() throws Exception {
+        Connection con = null;
+        Statement st = null;
+        ResultSet rs = null;
+
+        ArrayList < User > users = new ArrayList<>();
+
+        try {
+            con = db.getConnection();
+            st = con.createStatement();
+            rs = st.executeQuery("SELECT * from users ORDER BY profit DESC LIMIT 10");
+
+            while(rs.next()){
+                users.add(new User(rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getInt(5), rs.getInt(6), rs.getInt(7), rs.getString(8), rs.getInt(9), rs.getInt(10)));
+            }
+
+            st.close();
+            return users;
+
+        } catch(Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
+    @Override
+    public void makeOrdinaryBet(int amount, String userID, int eventID, boolean status) throws Exception{
+        Connection con = null;
+        PreparedStatement st = null;
+        ResultSet rs = null;
+
+        try {
+            con = db.getConnection();
+
+            st = con.prepareStatement("INSERT INTO betHistory values(DEFAULT, ?, ?, ?, ?)");
+            st.setString(1, userID);
+            st.setInt(2, eventID);
+            st.setInt(3, amount);
+            st.setBoolean(4, status);
+
+            st.executeUpdate();
+            st.close();
+
+        } catch(Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
+    @Override
+    public void changeBalance(int difference, boolean side, String userID) throws Exception {
+        Connection con = null;
+        PreparedStatement st = null;
+        ResultSet rs = null;
+
+        try {
+            con = db.getConnection();
+
+            String sql = "UPDATE users SET balance = balance" + (side ? "+" : "-") + "? WHERE id = ?";
+
+
+            st = con.prepareStatement(sql);
+            st.setInt(1, difference);
+            st.setString(2, userID);
+
+            st.executeUpdate();
+            st.close();
 
         } catch(Exception e) {
             e.printStackTrace();

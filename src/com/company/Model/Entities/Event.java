@@ -3,6 +3,7 @@ package com.company.Model.Entities;
 import java.util.Date;
 
 public class Event {
+    private int ID;
     private String category;
     private String firstPlayer;
     private String secondPlayer;
@@ -14,7 +15,8 @@ public class Event {
     private int moneyLimit;
     private String league;
 
-    public Event(String category, String firstPlayer, String secondPlayer, Date dateOfMatch, double coeffWin1, double coeffWin2, double coeffDraw, String location, int moneyLimit, String league) {
+    public Event(int ID, String category, String firstPlayer, String secondPlayer, Date dateOfMatch, double coeffWin1, double coeffWin2, double coeffDraw, String location, int moneyLimit, String league) {
+        this.ID = ID;
         this.category = category;
         this.firstPlayer = firstPlayer;
         this.secondPlayer = secondPlayer;
@@ -25,6 +27,14 @@ public class Event {
         this.location = location;
         this.moneyLimit = moneyLimit;
         this.league = league;
+    }
+
+    public int getID() {
+        return ID;
+    }
+
+    public void setID(int ID) {
+        this.ID = ID;
     }
 
     public String getCategory() {
@@ -110,7 +120,8 @@ public class Event {
     @Override
     public String toString() {
         return "Event{" +
-                "category='" + category + '\'' +
+                "ID=" + ID +
+                ", category='" + category + '\'' +
                 ", firstPlayer='" + firstPlayer + '\'' +
                 ", secondPlayer='" + secondPlayer + '\'' +
                 ", dateOfMatch=" + dateOfMatch +

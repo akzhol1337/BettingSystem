@@ -104,4 +104,18 @@ public class User {
     public void setProfit(int profit) {
         this.profit = profit;
     }
+
+    @Override
+    public String toString() {
+        return "name='" + name + '\'' +
+                ", ID='" + ID + '\'' +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", age=" + age +
+                ", totalBets=" + totalBets +
+                ", betsWon=" + betsWon +
+                ", ranking='" + ranking + '\'' +
+                ", balance=" + balance +
+                ", profit=" + profit;
+    }
 }

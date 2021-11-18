@@ -3,6 +3,7 @@ package com.company.Model.Repository;
 import com.company.Model.Entities.Event;
 import com.company.Model.Entities.User;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 public interface IPostgreRepository {
@@ -12,4 +13,8 @@ public interface IPostgreRepository {
     ArrayList<Event> getAllEvents() throws Exception;
     ArrayList<Event> getEventsByCategory(String category) throws Exception;
     ArrayList<Event> getEventsByLeague(String category, String league) throws Exception;
+    void changePassword(String ID, String newPassword) throws Exception;
+    ArrayList<User> leaderboard() throws Exception;
+    void makeOrdinaryBet(int amount, String userID, int eventID, boolean status) throws Exception;
+    public void changeBalance(int difference, boolean side, String userID) throws Exception;
 }
