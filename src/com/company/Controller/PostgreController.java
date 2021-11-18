@@ -17,12 +17,12 @@ public class PostgreController implements IPostgreController{
         return repo.getAllUsers();
     }
 
-    public boolean login(String email, String password) throws Exception{
+    public User login(String email, String password) throws Exception{
         return repo.login(email, password);
     }
 
-    public boolean register(String email, String password, int age) throws Exception{
-        return repo.register(email, password, age);
+    public boolean register(String name, String email, String password, int age) throws Exception{
+        return repo.register(name, email, password, age);
     }
 
     @Override

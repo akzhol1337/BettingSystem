@@ -33,7 +33,7 @@ public class PostgreRepository implements IPostgreRepository {
             rs = st.executeQuery("SELECT * from users");
 
             while(rs.next()){
-                users.add(new User(rs.getString(1), rs.getString(2), rs.getString(3), rs.getInt(4), rs.getInt(5), rs.getInt(6), rs.getString(7), rs.getInt(8), rs.getInt(9)));
+                users.add(new User(rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getInt(5), rs.getInt(6), rs.getInt(7), rs.getString(8), rs.getInt(9), rs.getInt(10)));
             }
 
             st.close();
@@ -47,26 +47,28 @@ public class PostgreRepository implements IPostgreRepository {
     }
 
     @Override
-    public boolean login(String email, String password) throws Exception {
+    public User login(String email, String password) throws Exception {
         Connection con = null;
         PreparedStatement st = null;
         ResultSet rs = null;
 
-        ArrayList < User > users = new ArrayList<>();
+        User account = null;
 
         try {
             con = db.getConnection();
-            st = con.prepareStatement("SELECT COUNT(*) FROM users WHERE email=? AND password=?");
+            st = con.prepareStatement("SELECT * FROM users WHERE email=? AND password=?");
             st.setString(1, email);
             st.setString(2, password);
 
             rs = st.executeQuery();
 
             while(rs.next()){
-                if(rs.getInt(1) == 1) { st.close(); return true;}
+                account = new User(rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getInt(5), rs.getInt(6), rs.getInt(7), rs.getString(8), rs.getInt(9), rs.getInt(10));
+                st.close();
+                return account;
             }
             st.close();
-            return false;
+            return null;
 
         } catch(Exception e) {
             e.printStackTrace();
@@ -75,12 +77,10 @@ public class PostgreRepository implements IPostgreRepository {
     }
 
     @Override
-    public boolean register(String email, String password, int age) throws Exception {
+    public boolean register(String name, String email, String password, int age) throws Exception {
         Connection con = null;
         PreparedStatement st = null;
         ResultSet rs = null;
-
-        ArrayList < User > users = new ArrayList<>();
 
         try {
             con = db.getConnection();
@@ -99,11 +99,12 @@ public class PostgreRepository implements IPostgreRepository {
                 st.close();
                 return false;
             }
-            st = con.prepareStatement("INSERT INTO users VALUES(?, ?, ?, ?, 0, 0, 'Hazik', 0, 0)");
-            st.setString(1, email);
+            st = con.prepareStatement("INSERT INTO users VALUES(?, ?, ?, ?, ?, 0, 0, 'Hazik', 0, 0)");
+            st.setString(1, name);
             st.setString(2, email);
-            st.setString(3, password);
-            st.setInt(4, age);
+            st.setString(3, email);
+            st.setString(4, password);
+            st.setInt(5, age);
 
             st.executeUpdate();
 

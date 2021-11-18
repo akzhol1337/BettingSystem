@@ -1,6 +1,7 @@
 package com.company.Model.Entities;
 
 public class User {
+    private String name;
     private String ID;
     private String email;
     private String password;
@@ -8,10 +9,11 @@ public class User {
     private int totalBets;
     private int betsWon;
     private String ranking;
-    private int cash;
+    private int balance;
     private int profit;
 
-    public User(String ID, String email, String password, int age, int totalBets, int betsWon, String ranking, int cash, int profit) {
+    public User(String name, String ID, String email, String password, int age, int totalBets, int betsWon, String ranking, int balance, int profit) {
+        this.name = name;
         this.ID = ID;
         this.email = email;
         this.password = password;
@@ -19,8 +21,16 @@ public class User {
         this.totalBets = totalBets;
         this.betsWon = betsWon;
         this.ranking = ranking;
-        this.cash = cash;
+        this.balance = balance;
         this.profit = profit;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getID() {
@@ -79,12 +89,12 @@ public class User {
         this.ranking = ranking;
     }
 
-    public int getCash() {
-        return cash;
+    public int getBalance() {
+        return balance;
     }
 
-    public void setCash(int cash) {
-        this.cash = cash;
+    public void setBalance(int balance) {
+        this.balance = balance;
     }
 
     public int getProfit() {
