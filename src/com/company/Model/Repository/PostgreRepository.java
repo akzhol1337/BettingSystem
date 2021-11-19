@@ -257,7 +257,7 @@ public class PostgreRepository implements IPostgreRepository {
         try {
             con = db.getConnection();
 
-            st = con.prepareStatement("INSERT INTO betHistory values(DEFAULT, ?, ?, ?, ?)");
+            st = con.prepareStatement("INSERT INTO betHistory values((SELECT MAX(betid)+1 from bethistory), ?, ?, ?, ?)");
             st.setString(1, userID);
             st.setInt(2, eventID);
             st.setInt(3, amount);
@@ -291,6 +291,37 @@ public class PostgreRepository implements IPostgreRepository {
             st.executeUpdate();
             st.close();
 
+        } catch(Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
+    @Override
+    public void makeExpressBet(int amount, String userID, ArrayList<Integer> eventsID, boolean status) throws Exception {
+        Connection con = null;
+        Statement st1 = null;
+
+        ResultSet rs = null;
+
+        try {
+            con = db.getConnection();
+
+            st1 = con.createStatement();
+
+            String sql = "INSERT INTO bethistory VALUES ";
+
+            for(int i = 0; i < eventsID.size(); i++){
+                if(i != 0) {
+                    sql += ", ";
+                }
+                sql += "(" + "(SELECT MAX(betid)+1 from bethistory)" + ", '" + userID + "', " + eventsID.get(i) + ", " + amount + ", " + status + " )";
+            }
+
+            sql += ";";
+
+            st1.executeUpdate(sql);
+            st1.close();
         } catch(Exception e) {
             e.printStackTrace();
             throw e;

@@ -59,7 +59,19 @@ public class PostgreController implements IPostgreController{
         }
 
         repo.makeOrdinaryBet(amount, user.getID(), eventID, true);
-        user.setBalance(user.getBalance()-amount);
+        user.setBalance(user.getBalance() - amount);
+        repo.changeBalance(amount, false, user.getID());
+    }
+
+    @Override
+    public void makeExpressBet(int amount, User user, ArrayList<Integer> eventsID) throws Exception {
+        if(amount > user.getBalance()){
+            System.out.println("Not enough money on balance!");
+            return;
+        }
+
+        repo.makeExpressBet(amount, user.getID(), eventsID, true);
+        user.setBalance(user.getBalance() - amount);
         repo.changeBalance(amount, false, user.getID());
     }
 }

@@ -29,6 +29,8 @@ public class Application {
 
 
         while(true){
+
+
             System.out.println("---------------------------------------");
             System.out.println("!!! Welcome to our Betting Service !!!");
             System.out.println("1: Login");
@@ -172,9 +174,30 @@ public class Application {
     }
 
     void makeBet(User user) throws Exception {
-        int eventID = in.nextInt();
-        int amount = in.nextInt();
-        controller.makeOrdinaryBet(amount, user, eventID);
+        System.out.println("1: Ordinary");
+        System.out.println("2: Express");
+        System.out.println("#: Return");
+
+        int choice;
+        choice = in.nextInt();
+
+        if(choice == 1){
+            int eventID = in.nextInt();
+            int amount = in.nextInt();
+            controller.makeOrdinaryBet(amount, user, eventID);
+        } else if(choice == 2){
+            System.out.println("Enter amount of money you bet");
+            int amount = in.nextInt();
+            System.out.println("Enter count of events");
+            int count = in.nextInt();
+            System.out.println("Enter id of events");
+            ArrayList<Integer> eventsID = new ArrayList<Integer>();
+            for(int i = 0; i < count; i++){
+                int id = in.nextInt();
+                eventsID.add(id);
+            }
+            controller.makeExpressBet(amount, user, eventsID);
+        }
     }
 
     void myProfile(User user) throws Exception {
