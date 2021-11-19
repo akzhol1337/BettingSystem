@@ -16,6 +16,9 @@ public interface IPostgreRepository {
     void changePassword(String ID, String newPassword) throws Exception;
     ArrayList<User> leaderboard() throws Exception;
     void makeOrdinaryBet(int amount, String userID, int eventID, boolean status) throws Exception;
-    void makeExpressBet(int amount, String userID, ArrayList<Integer> eventsID, boolean status) throws Exception;
-    public void changeBalance(int difference, boolean side, String userID) throws Exception;
+    boolean makeExpressBet(int amount, String userID, ArrayList<Integer> eventsID) throws Exception;
+    void changeBalance(int difference, boolean side, String userID) throws Exception;
+
+    ArrayList<Double> getCoefficent(ArrayList<Integer> eventsID) throws Exception;
+
 }

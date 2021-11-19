@@ -15,6 +15,8 @@ public class Event {
     private int moneyLimit;
     private String league;
 
+
+
     public Event(int ID, String category, String firstPlayer, String secondPlayer, Date dateOfMatch, double coeffWin1, double coeffWin2, double coeffDraw, String location, int moneyLimit, String league) {
         this.ID = ID;
         this.category = category;

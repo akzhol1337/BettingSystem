@@ -5,6 +5,7 @@ import com.company.Model.Entities.User;
 import com.company.Model.Repository.IPostgreRepository;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 public class PostgreController implements IPostgreController{
     private final IPostgreRepository repo;
@@ -58,9 +59,13 @@ public class PostgreController implements IPostgreController{
             return;
         }
 
-        repo.makeOrdinaryBet(amount, user.getID(), eventID, true);
+        Random r = new Random();
+        boolean outcome = r.nextBoolean();
+
+        repo.makeOrdinaryBet(amount, user.getID(), eventID, outcome);
         user.setBalance(user.getBalance() - amount);
-        repo.changeBalance(amount, false, user.getID());
+
+        repo.changeBalance(amount, outcome, user.getID());
     }
 
     @Override
@@ -69,9 +74,9 @@ public class PostgreController implements IPostgreController{
             System.out.println("Not enough money on balance!");
             return;
         }
+        boolean outcome = repo.makeExpressBet(amount, user.getID(), eventsID);
+        user.setBalance(user.getBalance() + (outcome ? amount : -amount));
+        repo.changeBalance(amount, outcome, user.getID());
 
-        repo.makeExpressBet(amount, user.getID(), eventsID, true);
-        user.setBalance(user.getBalance() - amount);
-        repo.changeBalance(amount, false, user.getID());
     }
 }

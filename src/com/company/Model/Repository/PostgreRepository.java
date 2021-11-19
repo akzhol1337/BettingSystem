@@ -8,6 +8,7 @@ import com.company.Model.DB.IPostgresAdapter;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Random;
 
 public class PostgreRepository implements IPostgreRepository {
     private final IPostgresAdapter db;
@@ -298,7 +299,7 @@ public class PostgreRepository implements IPostgreRepository {
     }
 
     @Override
-    public void makeExpressBet(int amount, String userID, ArrayList<Integer> eventsID, boolean status) throws Exception {
+    public boolean makeExpressBet(int amount, String userID, ArrayList<Integer> eventsID) throws Exception {
         Connection con = null;
         Statement st1 = null;
 
@@ -311,17 +312,58 @@ public class PostgreRepository implements IPostgreRepository {
 
             String sql = "INSERT INTO bethistory VALUES ";
 
+            Random r = new Random();
+
+            boolean outcome = true;
+            double totalCoeff = 1;
+
             for(int i = 0; i < eventsID.size(); i++){
+                boolean currentOutcome = r.nextBoolean();
+                if(!currentOutcome){
+                    outcome = false;
+                }
                 if(i != 0) {
                     sql += ", ";
                 }
-                sql += "(" + "(SELECT MAX(betid)+1 from bethistory)" + ", '" + userID + "', " + eventsID.get(i) + ", " + amount + ", " + status + " )";
+                sql += "(" + "(SELECT MAX(betid)+1 from bethistory)" + ", '" + userID + "', " + eventsID.get(i) + ", " + amount + ", " + outcome + " )";
             }
 
             sql += ";";
 
             st1.executeUpdate(sql);
             st1.close();
+            return outcome;
+        } catch(Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
+    @Override
+    public ArrayList<Double> getCoefficent(ArrayList<Integer> eventsID) throws Exception {
+        Connection con = null;
+        Statement st = null;
+        ResultSet rs = null;
+
+        User account = null;
+
+        try {
+            con = db.getConnection();
+            String sql = "SELECT coeffwin1, coeffwin2, coeffdraw FROM events WHERE id IN (";
+
+            for(int i = 0; i < eventsID.size(); i++){
+                if(i != eventsID.size() - 1) {
+                    sql += i + ", ";
+                } else {
+                    sql += ")";
+                }
+            }
+            st = con.createStatement();
+
+            ArrayList<Double> Coefficients = new ArrayList<Double>();
+
+            return Coefficients;
+
         } catch(Exception e) {
             e.printStackTrace();
             throw e;

@@ -18,19 +18,7 @@ public class Application {
     }
 
     public void start() throws Exception {
-        /*
-        ArrayList<User> users = controller.getAllUsers();
-
-        for(User user : users){
-            System.out.println(user.getEmail());
-        }
-
-         */
-
-
         while(true){
-
-
             System.out.println("---------------------------------------");
             System.out.println("!!! Welcome to our Betting Service !!!");
             System.out.println("1: Login");
@@ -190,10 +178,12 @@ public class Application {
             int amount = in.nextInt();
             System.out.println("Enter count of events");
             int count = in.nextInt();
-            System.out.println("Enter id of events");
+
             ArrayList<Integer> eventsID = new ArrayList<Integer>();
+
             for(int i = 0; i < count; i++){
                 int id = in.nextInt();
+                String pick = in.next();
                 eventsID.add(id);
             }
             controller.makeExpressBet(amount, user, eventsID);
@@ -236,4 +226,6 @@ public class Application {
             System.out.println(user.toString());
         }
     }
+
+
 }
