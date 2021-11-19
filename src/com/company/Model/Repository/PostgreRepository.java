@@ -8,6 +8,7 @@ import com.company.Model.DB.IPostgresAdapter;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.Random;
 
 public class PostgreRepository implements IPostgreRepository {
@@ -340,7 +341,7 @@ public class PostgreRepository implements IPostgreRepository {
     }
 
     @Override
-    public ArrayList<Double> getCoefficent(ArrayList<Integer> eventsID) throws Exception {
+    public double getCoefficentExpress(ArrayList<Integer> eventsID, Map< Integer, Integer > mapPick) throws Exception {
         Connection con = null;
         Statement st = null;
         ResultSet rs = null;
@@ -349,20 +350,107 @@ public class PostgreRepository implements IPostgreRepository {
 
         try {
             con = db.getConnection();
-            String sql = "SELECT coeffwin1, coeffwin2, coeffdraw FROM events WHERE id IN (";
+            String sql = "SELECT coeffwin1, coeffwin2, coeffdraw, id FROM events WHERE id IN (";
 
             for(int i = 0; i < eventsID.size(); i++){
-                if(i != eventsID.size() - 1) {
-                    sql += i + ", ";
+                if(i != (eventsID.size() - 1)) {
+                    sql += eventsID.get(i) + ", ";
                 } else {
-                    sql += ")";
+                    sql += eventsID.get(i) + ")";
                 }
             }
             st = con.createStatement();
 
-            ArrayList<Double> Coefficients = new ArrayList<Double>();
+            System.out.println(sql);
 
-            return Coefficients;
+            rs = st.executeQuery(sql);
+
+            double totalCoeff = 1;
+
+            while(rs.next()){
+                int bet = mapPick.get(rs.getInt(4));
+
+                if(bet == 0){
+                    totalCoeff *= rs.getDouble(1);
+                } else if(bet == 1){
+                    totalCoeff *= rs.getDouble(2);
+                } else {
+                    totalCoeff *= rs.getDouble(3);
+                }
+            }
+
+            st.close();
+            return totalCoeff;
+
+        } catch(Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
+    @Override
+    public void changeBetStatistics(String userID, int profit, boolean won) throws Exception {
+        Connection con = null;
+        PreparedStatement st = null;
+        ResultSet rs = null;
+
+        try {
+            con = db.getConnection();
+
+
+
+            st = con.prepareStatement("UPDATE users SET totalbets = totalbets + 1, betswon = betswon + ?, profit = profit + ?  WHERE ID = ?");
+            st.setInt(1, won ? 1 : 0);
+            st.setInt(2, profit);
+            st.setString(3, userID);
+
+            st.executeUpdate();
+            st.close();
+
+        } catch(Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
+    @Override
+    public double getCoefficentOrindary(int eventID, int pick) throws Exception {
+        Connection con = null;
+        Statement st = null;
+        ResultSet rs = null;
+
+        ArrayList < Event > events = new ArrayList<>();
+
+        try {
+            con = db.getConnection();
+
+            String choice = "draw";
+            if(pick == 0){
+                choice = "win1";
+            } else if(pick == 1){
+                choice = "win2";
+            }
+
+
+
+            //st = con.prepareStatement("SELECT ? from events where id=?");
+
+            String sql = "SELECT coeff" + choice + " from events where id=" + eventID;
+
+            st = con.createStatement();
+            rs = st.executeQuery(sql);
+
+
+            //rs = st.executeQuery();
+
+            double coeff = 1;
+
+            while(rs.next()){
+                coeff = rs.getDouble(1);
+            }
+
+            st.close();
+            return coeff;
 
         } catch(Exception e) {
             e.printStackTrace();

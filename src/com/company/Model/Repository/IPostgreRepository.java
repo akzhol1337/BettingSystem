@@ -5,6 +5,7 @@ import com.company.Model.Entities.User;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Map;
 
 public interface IPostgreRepository {
     ArrayList<User> getAllUsers() throws Exception;
@@ -18,7 +19,8 @@ public interface IPostgreRepository {
     void makeOrdinaryBet(int amount, String userID, int eventID, boolean status) throws Exception;
     boolean makeExpressBet(int amount, String userID, ArrayList<Integer> eventsID) throws Exception;
     void changeBalance(int difference, boolean side, String userID) throws Exception;
-
-    ArrayList<Double> getCoefficent(ArrayList<Integer> eventsID) throws Exception;
+    double getCoefficentExpress(ArrayList<Integer> eventsID, Map< Integer, Integer > mapPick) throws Exception;
+    double getCoefficentOrindary(int eventID, int pick) throws Exception;
+    void changeBetStatistics(String userID, int profit, boolean won) throws Exception;
 
 }

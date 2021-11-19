@@ -7,6 +7,8 @@ import com.company.Model.Entities.User;
 import com.company.Model.Repository.IPostgreRepository;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
 
 public class Application {
@@ -170,9 +172,22 @@ public class Application {
         choice = in.nextInt();
 
         if(choice == 1){
-            int eventID = in.nextInt();
+
+            System.out.println("Enter amount of money you bet");
             int amount = in.nextInt();
-            controller.makeOrdinaryBet(amount, user, eventID);
+            int eventID = in.nextInt();
+            String pickStr = in.next();
+
+            int pick;
+            if(pickStr.equals("W1")){
+                pick = 0;
+            } else if(pickStr.equals("W2")){
+                pick = 1;
+            } else {
+                pick = 2;
+            }
+
+            controller.makeOrdinaryBet(amount, user, eventID, pick);
         } else if(choice == 2){
             System.out.println("Enter amount of money you bet");
             int amount = in.nextInt();
@@ -180,13 +195,23 @@ public class Application {
             int count = in.nextInt();
 
             ArrayList<Integer> eventsID = new ArrayList<Integer>();
+            Map< Integer, Integer > mapPick = new HashMap<Integer, Integer>();
 
             for(int i = 0; i < count; i++){
                 int id = in.nextInt();
                 String pick = in.next();
+
+                if(pick.equals("W1")){
+                    mapPick.put(id, 0);
+                } else if(pick.equals("W2")){
+                    mapPick.put(id, 1);
+                } else {
+                    mapPick.put(id, 2);
+                }
+
                 eventsID.add(id);
             }
-            controller.makeExpressBet(amount, user, eventsID);
+            controller.makeExpressBet(amount, user, eventsID, mapPick);
         }
     }
 

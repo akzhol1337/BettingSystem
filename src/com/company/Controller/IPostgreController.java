@@ -5,6 +5,7 @@ import com.company.Model.Entities.User;
 import com.company.Model.Repository.IPostgreRepository;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 public interface IPostgreController {
     ArrayList<User> getAllUsers() throws Exception;
@@ -15,6 +16,6 @@ public interface IPostgreController {
     ArrayList<Event> getEventsByLeague(String category, String league) throws Exception;
     void changePassword(String ID, String newPassword) throws Exception;
     ArrayList<User> leaderboard() throws Exception;
-    void makeOrdinaryBet(int amount, User user, int eventID) throws Exception;
-    void makeExpressBet(int amount, User user, ArrayList<Integer> eventsID) throws Exception;
+    void makeOrdinaryBet(int amount, User user, int eventID, int pick) throws Exception;
+    void makeExpressBet(int amount, User user, ArrayList<Integer> eventsID, Map< Integer, Integer > mapPick) throws Exception;
 }

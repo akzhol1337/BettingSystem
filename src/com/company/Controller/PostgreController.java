@@ -5,6 +5,7 @@ import com.company.Model.Entities.User;
 import com.company.Model.Repository.IPostgreRepository;
 
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.Random;
 
 public class PostgreController implements IPostgreController{
@@ -52,7 +53,7 @@ public class PostgreController implements IPostgreController{
     }
 
     @Override
-    public void makeOrdinaryBet(int amount, User user, int eventID) throws Exception {
+    public void makeOrdinaryBet(int amount, User user, int eventID, int pick) throws Exception {
 
         if(amount > user.getBalance()){
             System.out.println("Not enough money on balance!");
@@ -62,21 +63,51 @@ public class PostgreController implements IPostgreController{
         Random r = new Random();
         boolean outcome = r.nextBoolean();
 
-        repo.makeOrdinaryBet(amount, user.getID(), eventID, outcome);
-        user.setBalance(user.getBalance() - amount);
+        double coeff = repo.getCoefficentOrindary(eventID, pick);
+        user.setTotalBets(user.getTotalBets()+1);
 
-        repo.changeBalance(amount, outcome, user.getID());
+        System.out.println(coeff);
+        repo.makeOrdinaryBet(amount, user.getID(), eventID, outcome);
+
+        if(outcome){
+            int profit = (int)(amount * (coeff-1));
+            user.setBalance(user.getBalance() + profit);
+            user.setBetsWon(user.getBetsWon()+1);
+
+            repo.changeBalance(profit, true, user.getID());
+            repo.changeBetStatistics(user.getID(), profit, true);
+        } else {
+            user.setBalance(user.getBalance() - amount);
+
+            repo.changeBalance(amount, false, user.getID());
+            repo.changeBetStatistics(user.getID(), 0, false);
+        }
     }
 
     @Override
-    public void makeExpressBet(int amount, User user, ArrayList<Integer> eventsID) throws Exception {
+    public void makeExpressBet(int amount, User user, ArrayList<Integer> eventsID, Map< Integer, Integer > mapPick) throws Exception {
         if(amount > user.getBalance()){
             System.out.println("Not enough money on balance!");
             return;
         }
         boolean outcome = repo.makeExpressBet(amount, user.getID(), eventsID);
-        user.setBalance(user.getBalance() + (outcome ? amount : -amount));
-        repo.changeBalance(amount, outcome, user.getID());
+        user.setTotalBets(user.getTotalBets()+1);
+        if(outcome){
+            double coeff = repo.getCoefficentExpress(eventsID, mapPick);
+            int profit = (int)(amount * (coeff-1));
+            user.setBalance(user.getBalance() + profit);
+            repo.changeBalance(profit, true, user.getID());
+            user.setBetsWon(user.getBetsWon()+1);
+            user.setProfit(user.getProfit() + profit);
+
+            repo.changeBetStatistics(user.getID(), profit, true);
+        } else {
+            user.setBalance(user.getBalance() - amount);
+            repo.changeBalance(amount, false, user.getID());
+
+
+            repo.changeBetStatistics(user.getID(), 0, false);
+        }
 
     }
 }
