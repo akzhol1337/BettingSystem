@@ -17,7 +17,7 @@ public interface IPostgreController {
     ArrayList<Event> getEventsByLeague(String category, String league) throws Exception;
     void changePassword(String ID, String newPassword) throws Exception;
     ArrayList<User> leaderboard() throws Exception;
-    void makeOrdinaryBet(int amount, User user, int eventID, int pick) throws Exception;
+    void makeOrdinaryBet(int amount, User user, int eventID, short pick) throws Exception;
     void makeExpressBet(int amount, User user, ArrayList<Integer> eventsID, Map< Integer, Integer > mapPick) throws Exception;
     ArrayList<Bet> getBetHistory(String userID) throws Exception;
 }

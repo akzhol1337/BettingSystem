@@ -252,7 +252,7 @@ public class PostgreRepository implements IPostgreRepository {
     }
 
     @Override
-    public void makeOrdinaryBet(int amount, String userID, int eventID, boolean status) throws Exception{
+    public void makeOrdinaryBet(int amount, String userID, int eventID, boolean status, short pick) throws Exception{
         Connection con = null;
         PreparedStatement st = null;
         ResultSet rs = null;
@@ -260,11 +260,12 @@ public class PostgreRepository implements IPostgreRepository {
         try {
             con = db.getConnection();
 
-            st = con.prepareStatement("INSERT INTO betHistory values((SELECT MAX(betid)+1 from bethistory), ?, ?, ?, ?)");
+            st = con.prepareStatement("INSERT INTO betHistory values((SELECT MAX(betid)+1 from bethistory), ?, ?, ?, ?, ?)");
             st.setString(1, userID);
             st.setInt(2, eventID);
             st.setInt(3, amount);
             st.setBoolean(4, status);
+            st.setShort(5, pick);
 
             st.executeUpdate();
             st.close();
@@ -469,16 +470,27 @@ public class PostgreRepository implements IPostgreRepository {
 
         try {
             con = db.getConnection();
-            st = con.prepareStatement("SELECT * from bethistory where userid=?");
+            st = con.prepareStatement("select betID, userID, eventID, amount, status, choice, events.firstPlayer, events.secondPlayer, \n" +
+                    "  ( \n" +
+                    "  CASE WHEN betHistory.choice = 0 THEN events.coeffWin1\n" +
+                    "   WHEN betHistory.choice = 1 THEN events.coeffWin2\n" +
+                    "   WHEN betHistory.choice = 2 THEN events.coeffDraw\n" +
+                    "   END\n" +
+                    "  )\n" +
+                    "  FROM betHistory \n" +
+                    "  INNER JOIN events ON betHistory.eventID = events.ID\n" +
+                    "  WHERE userID = ?");
+
             st.setString(1, userID);
 
             rs = st.executeQuery();
-            
+
             ArrayList<Bet> bets = new ArrayList<>();
-            
+
             while(rs.next()){
-                bets.add(new Bet(rs.getInt(1), rs.getString(2), rs.getInt(3), rs.getInt(4), rs.getBoolean(5)));
+                bets.add(new Bet(rs.getInt(1), rs.getString(2), rs.getInt(3), rs.getInt(4), rs.getBoolean(5), rs.getShort(6), rs.getString(7), rs.getString(8), rs.getDouble(9)));
             }
+
 
             st.close();
             return bets;

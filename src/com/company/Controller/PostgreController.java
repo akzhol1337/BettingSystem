@@ -54,7 +54,7 @@ public class PostgreController implements IPostgreController{
     }
 
     @Override
-    public void makeOrdinaryBet(int amount, User user, int eventID, int pick) throws Exception {
+    public void makeOrdinaryBet(int amount, User user, int eventID, short pick) throws Exception {
 
         if(amount > user.getBalance()){
             System.out.println("Not enough money on balance!");
@@ -68,7 +68,7 @@ public class PostgreController implements IPostgreController{
         user.setTotalBets(user.getTotalBets()+1);
 
         System.out.println(coeff);
-        repo.makeOrdinaryBet(amount, user.getID(), eventID, outcome);
+        repo.makeOrdinaryBet(amount, user.getID(), eventID, outcome, pick);
 
         if(outcome){
             int profit = (int)(amount * (coeff-1));

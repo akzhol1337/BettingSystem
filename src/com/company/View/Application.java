@@ -179,7 +179,7 @@ public class Application {
             int eventID = in.nextInt();
             String pickStr = in.next();
 
-            int pick;
+            short pick;
             if(pickStr.equals("W1")){
                 pick = 0;
             } else if(pickStr.equals("W2")){
