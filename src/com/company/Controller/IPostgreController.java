@@ -1,5 +1,6 @@
 package com.company.Controller;
 
+import com.company.Model.Entities.Bet;
 import com.company.Model.Entities.Event;
 import com.company.Model.Entities.User;
 import com.company.Model.Repository.IPostgreRepository;
@@ -18,4 +19,5 @@ public interface IPostgreController {
     ArrayList<User> leaderboard() throws Exception;
     void makeOrdinaryBet(int amount, User user, int eventID, int pick) throws Exception;
     void makeExpressBet(int amount, User user, ArrayList<Integer> eventsID, Map< Integer, Integer > mapPick) throws Exception;
+    ArrayList<Bet> getBetHistory(String userID) throws Exception;
 }

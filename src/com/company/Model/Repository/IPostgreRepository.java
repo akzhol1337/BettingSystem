@@ -1,5 +1,6 @@
 package com.company.Model.Repository;
 
+import com.company.Model.Entities.Bet;
 import com.company.Model.Entities.Event;
 import com.company.Model.Entities.User;
 
@@ -22,5 +23,6 @@ public interface IPostgreRepository {
     double getCoefficentExpress(ArrayList<Integer> eventsID, Map< Integer, Integer > mapPick) throws Exception;
     double getCoefficentOrindary(int eventID, int pick) throws Exception;
     void changeBetStatistics(String userID, int profit, boolean won) throws Exception;
+    ArrayList<Bet> getBetHistory(String userID) throws Exception;
 
 }

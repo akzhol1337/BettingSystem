@@ -1,5 +1,6 @@
 package com.company.Controller;
 
+import com.company.Model.Entities.Bet;
 import com.company.Model.Entities.Event;
 import com.company.Model.Entities.User;
 import com.company.Model.Repository.IPostgreRepository;
@@ -108,6 +109,10 @@ public class PostgreController implements IPostgreController{
 
             repo.changeBetStatistics(user.getID(), 0, false);
         }
+    }
 
+    @Override
+    public ArrayList<Bet> getBetHistory(String userID) throws Exception {
+        return repo.getBetHistory(userID);
     }
 }

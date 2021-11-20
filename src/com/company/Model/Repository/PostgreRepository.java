@@ -2,6 +2,7 @@ package com.company.Model.Repository;
 
 
 
+import com.company.Model.Entities.Bet;
 import com.company.Model.Entities.Event;
 import com.company.Model.Entities.User;
 import com.company.Model.DB.IPostgresAdapter;
@@ -451,6 +452,36 @@ public class PostgreRepository implements IPostgreRepository {
 
             st.close();
             return coeff;
+
+        } catch(Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
+    @Override
+    public ArrayList<Bet> getBetHistory(String userID) throws Exception {
+        Connection con = null;
+        PreparedStatement st = null;
+        ResultSet rs = null;
+
+        ArrayList < User > users = new ArrayList<>();
+
+        try {
+            con = db.getConnection();
+            st = con.prepareStatement("SELECT * from bethistory where userid=?");
+            st.setString(1, userID);
+
+            rs = st.executeQuery();
+            
+            ArrayList<Bet> bets = new ArrayList<>();
+            
+            while(rs.next()){
+                bets.add(new Bet(rs.getInt(1), rs.getString(2), rs.getInt(3), rs.getInt(4), rs.getBoolean(5)));
+            }
+
+            st.close();
+            return bets;
 
         } catch(Exception e) {
             e.printStackTrace();

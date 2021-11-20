@@ -2,6 +2,7 @@ package com.company.View;
 
 import com.company.Controller.IPostgreController;
 import com.company.Controller.PostgreController;
+import com.company.Model.Entities.Bet;
 import com.company.Model.Entities.Event;
 import com.company.Model.Entities.User;
 import com.company.Model.Repository.IPostgreRepository;
@@ -228,6 +229,7 @@ public class Application {
 
             System.out.println("1: Change password");
             System.out.println("2: See leaderboard");
+            System.out.println("3: My bets history");
             System.out.println("# Return");
 
             int choice = in.nextInt();
@@ -235,6 +237,8 @@ public class Application {
                 changePassword(user);
             } else if(choice == 2){
                 leaderboard();
+            } else if(choice == 3){
+                betHistory(user);
             } else {
                 break;
             }
@@ -247,10 +251,23 @@ public class Application {
     }
 
     void leaderboard() throws Exception {
+        System.out.println("-------LEADERBOARD--------");
+        int top = 0;
         for(User user : controller.leaderboard()){
+            System.out.print("#" + top + ": ");
             System.out.println(user.toString());
+            top++;
         }
+
+        System.out.println("--------------------------");
     }
 
+    void betHistory(User user) throws Exception {
+        System.out.println("-------BET HISTORY--------");
+        for(Bet bet : controller.getBetHistory(user.getID())){
+            System.out.println(bet.toString());
+        }
+        System.out.println("---------------------------");
+    }
 
 }
