@@ -18,6 +18,6 @@ public interface IPostgreController {
     void changePassword(String ID, String newPassword) throws Exception;
     ArrayList<User> leaderboard() throws Exception;
     void makeOrdinaryBet(int amount, User user, int eventID, short pick) throws Exception;
-    void makeExpressBet(int amount, User user, ArrayList<Integer> eventsID, Map< Integer, Integer > mapPick) throws Exception;
+    void makeExpressBet(int amount, User user, ArrayList<Integer> eventsID, Map< Integer, Short > mapPick) throws Exception;
     ArrayList<Bet> getBetHistory(String userID) throws Exception;
 }

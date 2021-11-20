@@ -302,7 +302,7 @@ public class PostgreRepository implements IPostgreRepository {
     }
 
     @Override
-    public boolean makeExpressBet(int amount, String userID, ArrayList<Integer> eventsID) throws Exception {
+    public boolean makeExpressBet(int amount, String userID, ArrayList<Integer> eventsID, Map< Integer, Short > mapPick) throws Exception {
         Connection con = null;
         Statement st1 = null;
 
@@ -328,10 +328,11 @@ public class PostgreRepository implements IPostgreRepository {
                 if(i != 0) {
                     sql += ", ";
                 }
-                sql += "(" + "(SELECT MAX(betid)+1 from bethistory)" + ", '" + userID + "', " + eventsID.get(i) + ", " + amount + ", " + outcome + " )";
+                sql += "(" + "(SELECT MAX(betid)+1 from bethistory)" + ", '" + userID + "', " + eventsID.get(i) + ", " + amount + ", " + outcome + ", " + mapPick.get(eventsID.get(i) )+" )";
             }
 
             sql += ";";
+
 
             st1.executeUpdate(sql);
             st1.close();
@@ -343,7 +344,7 @@ public class PostgreRepository implements IPostgreRepository {
     }
 
     @Override
-    public double getCoefficentExpress(ArrayList<Integer> eventsID, Map< Integer, Integer > mapPick) throws Exception {
+    public double getCoefficentExpress(ArrayList<Integer> eventsID, Map< Integer, Short > mapPick) throws Exception {
         Connection con = null;
         Statement st = null;
         ResultSet rs = null;

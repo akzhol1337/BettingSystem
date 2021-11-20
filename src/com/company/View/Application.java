@@ -196,18 +196,18 @@ public class Application {
             int count = in.nextInt();
 
             ArrayList<Integer> eventsID = new ArrayList<Integer>();
-            Map< Integer, Integer > mapPick = new HashMap<Integer, Integer>();
+            Map< Integer, Short > mapPick = new HashMap<Integer, Short>();
 
             for(int i = 0; i < count; i++){
                 int id = in.nextInt();
                 String pick = in.next();
 
                 if(pick.equals("W1")){
-                    mapPick.put(id, 0);
+                    mapPick.put(id, (short) 0);
                 } else if(pick.equals("W2")){
-                    mapPick.put(id, 1);
+                    mapPick.put(id, (short) 1);
                 } else {
-                    mapPick.put(id, 2);
+                    mapPick.put(id, (short) 2);
                 }
 
                 eventsID.add(id);
@@ -264,10 +264,40 @@ public class Application {
 
     void betHistory(User user) throws Exception {
         System.out.println("-------BET HISTORY--------");
-        for(Bet bet : controller.getBetHistory(user.getID())){
-            System.out.println(bet.toString());
+        int cur = 0;
+
+        ArrayList<Bet> bets = controller.getBetHistory(user.getID());
+
+        for(int i = 0; i < bets.size(); i++){
+
+            Bet currentBet = bets.get(i);
+
+            boolean expressStatus = true;
+            double expressCoeff = 1.0;
+            int expressAmount = 0;
+            int expressCount = 0;
+
+            if(i != 0 && currentBet.getID() == bets.get(i-1).getID()){
+                System.out.println(bets.get(i).toStringExpress());
+                if(!currentBet.isStatus()) expressStatus = false;
+                expressCoeff *= currentBet.getCoeff();
+                expressCount++;
+                expressAmount += currentBet.getAmount();
+
+                if(i + 1 == bets.size() || bets.get(i+1).getID() != currentBet.getID()){
+                    System.out.println("EXPRESS " + expressCount + " matches : " + expressCoeff + ", " + (currentBet.isStatus() ? "WON " : "LOSE ") + (expressAmount * expressCoeff));
+                    System.out.println("------------------------------------");
+                    expressStatus = true;
+                    expressCoeff = 1.0;
+                    expressAmount = 0;
+                    expressCount = 0;
+                }
+            } else {
+                System.out.println("-");
+                System.out.println(bets.get(i).toStringOrdinary());
+                System.out.println("-");
+            }
         }
-        System.out.println("---------------------------");
     }
 
 }

@@ -86,12 +86,12 @@ public class PostgreController implements IPostgreController{
     }
 
     @Override
-    public void makeExpressBet(int amount, User user, ArrayList<Integer> eventsID, Map< Integer, Integer > mapPick) throws Exception {
+    public void makeExpressBet(int amount, User user, ArrayList<Integer> eventsID, Map< Integer, Short > mapPick) throws Exception {
         if(amount > user.getBalance()){
             System.out.println("Not enough money on balance!");
             return;
         }
-        boolean outcome = repo.makeExpressBet(amount, user.getID(), eventsID);
+        boolean outcome = repo.makeExpressBet(amount, user.getID(), eventsID, mapPick);
         user.setTotalBets(user.getTotalBets()+1);
         if(outcome){
             double coeff = repo.getCoefficentExpress(eventsID, mapPick);

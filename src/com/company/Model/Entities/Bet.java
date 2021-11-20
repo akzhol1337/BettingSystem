@@ -95,18 +95,12 @@ public class Bet {
         this.coeff = coeff;
     }
 
-    @Override
-    public String toString() {
-        return "Bet{" +
-                "ID=" + ID +
-                ", userID='" + userID + '\'' +
-                ", eventID=" + eventID +
-                ", amount=" + amount +
-                ", status=" + status +
-                ", choice=" + choice +
-                ", team1='" + team1 + '\'' +
-                ", team2='" + team2 + '\'' +
-                ", coeff=" + coeff +
-                '}';
+    public String toStringOrdinary() {
+        return team1 + " " + team2 + "| " + (status ? "won" : "lose") + " +" + (amount * coeff * (status ? 1 : 0));
     }
+    public String toStringExpress() {
+        return team1 + " " + team2 + "|";
+    }
+
+
 }
