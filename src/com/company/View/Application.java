@@ -1,7 +1,6 @@
 package com.company.View;
 
-import com.company.Controller.IPostgreController;
-import com.company.Controller.PostgreController;
+import com.company.Controller.*;
 import com.company.Model.Entities.Admin;
 import com.company.Model.Entities.Bet;
 import com.company.Model.Entities.Event;
@@ -15,10 +14,13 @@ import java.util.Scanner;
 
 public class Application {
     private final IPostgreController controller;
+    private BetContext bet = new BetContext();
+    private IPostgreRepository repo = null;
     Scanner in = new Scanner(System.in);
     Admin admin = new Admin(0, "admin", "admin");
 
     public Application(IPostgreRepository adapter) throws Exception {
+        repo = adapter;
         controller = new PostgreController(adapter);
         for(User user : controller.getAllUsers()){
             admin.addUser(user);
@@ -345,10 +347,15 @@ public class Application {
         int choice;
         choice = in.nextInt();
 
+        int amount;
+        ArrayList<Integer> eventsID = new ArrayList<Integer>();
+        Map< Integer, Short > mapPick = new HashMap<Integer, Short>();
+
         if(choice == 1){
 
             System.out.println("Enter amount of money you bet");
-            int amount = in.nextInt();
+            amount = in.nextInt();
+
             int eventID = in.nextInt();
             String pickStr = in.next();
 
@@ -361,19 +368,24 @@ public class Application {
                 pick = 2;
             }
 
-            controller.makeOrdinaryBet(amount, user, eventID, pick);
+            eventsID.add(eventID);
+            mapPick.put(eventID, pick);
+
+            bet.setStrategy(new BetStrategyOrdinary(repo));
+
+            bet.executeStrategy(amount, user, eventsID, mapPick);
+
+            //controller.makeOrdinaryBet(amount, user, eventID, pick);
         } else if(choice == 2){
             System.out.println("Enter amount of money you bet");
-            int amount = in.nextInt();
+            amount = in.nextInt();
             System.out.println("Enter count of events");
             int count = in.nextInt();
-
-            ArrayList<Integer> eventsID = new ArrayList<Integer>();
-            Map< Integer, Short > mapPick = new HashMap<Integer, Short>();
 
             for(int i = 0; i < count; i++){
                 int id = in.nextInt();
                 String pick = in.next();
+                System.out.println(id + " " + pick);
 
                 if(pick.equals("W1")){
                     mapPick.put(id, (short) 0);
@@ -385,8 +397,14 @@ public class Application {
 
                 eventsID.add(id);
             }
-            controller.makeExpressBet(amount, user, eventsID, mapPick);
+
+
+            bet.setStrategy(new BetStrategyExpress(repo));
+            //controller.makeExpressBet(amount, user, eventsID, mapPick);
+
+            bet.executeStrategy(amount, user, eventsID, mapPick);
         }
+
     }
 
     void myProfile(User user) throws Exception {
@@ -444,7 +462,7 @@ public class Application {
         boolean expressStatus = true;
         double expressCoeff = 1.0;
         int expressAmount = 0;
-        int expressCount = 0;
+        int expressCount = 1;
 
         for(int i = 0; i < bets.size(); i++){
 
@@ -463,7 +481,7 @@ public class Application {
                     expressStatus = true;
                     expressCoeff = 1.0;
                     expressAmount = 0;
-                    expressCount = 0;
+                    expressCount = 1;
                 }
             } else {
                 System.out.println(bets.get(i).toStringOrdinary());

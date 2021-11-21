@@ -62,7 +62,7 @@ public class PostgreController implements IPostgreController{
     public ArrayList<User> leaderboard() throws Exception {
         return repo.leaderboard();
     }
-
+    /*
     @Override
     public void makeOrdinaryBet(int amount, User user, int eventID, short pick) throws Exception {
 
@@ -74,7 +74,7 @@ public class PostgreController implements IPostgreController{
         Random r = new Random();
         boolean outcome = r.nextBoolean();
 
-        double coeff = repo.getCoefficentOrindary(eventID, pick);
+        double coeff = repo.getCoefficientOrindary(eventID, pick);
         user.setTotalBets(user.getTotalBets()+1);
 
         System.out.println(coeff);
@@ -104,7 +104,7 @@ public class PostgreController implements IPostgreController{
         boolean outcome = repo.makeExpressBet(amount, user.getID(), eventsID, mapPick);
         user.setTotalBets(user.getTotalBets()+1);
         if(outcome){
-            double coeff = repo.getCoefficentExpress(eventsID, mapPick);
+            double coeff = repo.getCoefficientExpress(eventsID, mapPick);
             int profit = (int)(amount * (coeff-1));
             user.setBalance(user.getBalance() + profit);
             repo.changeBalance(profit, true, user.getID());
@@ -120,7 +120,7 @@ public class PostgreController implements IPostgreController{
             repo.changeBetStatistics(user.getID(), 0, false);
         }
     }
-
+    */
     @Override
     public ArrayList<Bet> getBetHistory(String userID) throws Exception {
         return repo.getBetHistory(userID);

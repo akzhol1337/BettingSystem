@@ -344,7 +344,7 @@ public class PostgreRepository implements IPostgreRepository {
     }
 
     @Override
-    public double getCoefficentExpress(ArrayList<Integer> eventsID, Map< Integer, Short > mapPick) throws Exception {
+    public double getCoefficientExpress(ArrayList<Integer> eventsID, Map< Integer, Short > mapPick) throws Exception {
         Connection con = null;
         Statement st = null;
         ResultSet rs = null;
@@ -417,7 +417,7 @@ public class PostgreRepository implements IPostgreRepository {
     }
 
     @Override
-    public double getCoefficentOrindary(int eventID, int pick) throws Exception {
+    public double getCoefficientOrindary(int eventID, int pick) throws Exception {
         Connection con = null;
         Statement st = null;
         ResultSet rs = null;
