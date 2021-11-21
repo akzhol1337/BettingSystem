@@ -268,14 +268,14 @@ public class Application {
 
         ArrayList<Bet> bets = controller.getBetHistory(user.getID());
 
+        boolean expressStatus = true;
+        double expressCoeff = 1.0;
+        int expressAmount = 0;
+        int expressCount = 0;
+
         for(int i = 0; i < bets.size(); i++){
 
             Bet currentBet = bets.get(i);
-
-            boolean expressStatus = true;
-            double expressCoeff = 1.0;
-            int expressAmount = 0;
-            int expressCount = 0;
 
             if(i != 0 && currentBet.getID() == bets.get(i-1).getID()){
                 System.out.println(bets.get(i).toStringExpress());
@@ -293,7 +293,6 @@ public class Application {
                     expressCount = 0;
                 }
             } else {
-                System.out.println("-");
                 System.out.println(bets.get(i).toStringOrdinary());
                 System.out.println("-");
             }

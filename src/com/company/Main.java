@@ -10,7 +10,7 @@ public class Main {
 
     public static void main(String[] args) throws Exception {
 
-        IPostgresAdapter adapter = new PostgresAdapter();
+        IPostgresAdapter adapter = PostgresAdapter.getInstance();
         IPostgreRepository repo = new PostgreRepository(adapter);
 
 

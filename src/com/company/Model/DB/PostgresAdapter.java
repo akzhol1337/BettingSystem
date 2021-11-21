@@ -6,7 +6,17 @@ import java.sql.SQLException;
 
 public class PostgresAdapter implements IPostgresAdapter{
 
-    public PostgresAdapter() {
+    private static PostgresAdapter instance;
+
+    private PostgresAdapter() {
+
+    }
+
+    public static PostgresAdapter getInstance(){
+        if(instance == null){
+            instance = new PostgresAdapter();
+        }
+        return instance;
     }
 
     @Override
