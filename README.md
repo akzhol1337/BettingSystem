@@ -33,6 +33,6 @@ There are two types of bets, Ordinary and express, two algorithms to make a bet.
 
 Every user has a ranking, defined by bets won.
 ## Summary
-The main purpose of my project is to make it easy to manage patients and get information from database without any problem using design patterns.
+The main purpose of a project is to make it easy to manage data and get information from database without any problem using design patterns.
 
 Hope this project will help to enhance the quality of the betting system.
