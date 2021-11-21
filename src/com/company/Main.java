@@ -2,6 +2,7 @@ package com.company;
 
 import com.company.Model.DB.IPostgresAdapter;
 import com.company.Model.DB.PostgresAdapter;
+import com.company.Model.Entities.Admin;
 import com.company.Model.Repository.IPostgreRepository;
 import com.company.Model.Repository.PostgreRepository;
 import com.company.View.Application;

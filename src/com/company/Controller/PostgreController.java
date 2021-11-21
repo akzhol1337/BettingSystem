@@ -20,6 +20,16 @@ public class PostgreController implements IPostgreController{
         return repo.getAllUsers();
     }
 
+    @Override
+    public void changeBalance(String ID, int newBalance) throws Exception {
+        repo.changeBalance(ID, newBalance);
+    }
+
+    @Override
+    public void changeRank(String ID, String newRank) throws Exception {
+        repo.changeRank(ID, newRank);
+    }
+
     public User login(String email, String password) throws Exception{
         return repo.login(email, password);
     }
@@ -114,5 +124,20 @@ public class PostgreController implements IPostgreController{
     @Override
     public ArrayList<Bet> getBetHistory(String userID) throws Exception {
         return repo.getBetHistory(userID);
+    }
+
+    @Override
+    public void removeEvent(int ID) throws Exception {
+        repo.removeEvent(ID);
+    }
+
+    @Override
+    public void editEventInfo(int ID, String newInfo, short pick) throws Exception {
+        repo.editEventInfo(ID, newInfo, pick);
+    }
+
+    @Override
+    public void editEventCoefficient(int ID, double newCoefficient, short pick) throws Exception {
+        repo.editEventCoefficient(ID, newCoefficient, pick);
     }
 }

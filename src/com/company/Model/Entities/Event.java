@@ -121,7 +121,7 @@ public class Event {
 
     @Override
     public String toString() {
-        return "#" + ID + ": " + firstPlayer + " VS " + secondPlayer + " - W1: " + coeffWin1 + " X: " + coeffDraw + " W2: " + coeffWin2 + "\n";
+        return category + " #" + ID + ": " + firstPlayer + " VS " + secondPlayer + " - W1: " + coeffWin1 + " X: " + coeffDraw + " W2: " + coeffWin2 + "    [" + location + " : " + league + " : " + dateOfMatch + "]\n";
     }
 
 

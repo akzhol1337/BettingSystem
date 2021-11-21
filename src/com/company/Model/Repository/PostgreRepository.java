@@ -501,4 +501,143 @@ public class PostgreRepository implements IPostgreRepository {
             throw e;
         }
     }
+
+    @Override
+    public void changeBalance(String ID, int newBalance) throws Exception{
+        Connection con = null;
+        PreparedStatement st = null;
+        ResultSet rs = null;
+
+        try {
+            con = db.getConnection();
+
+            String sql = "UPDATE users SET balance = ? WHERE id = ?";
+
+            st = con.prepareStatement(sql);
+            st.setInt(1, newBalance);
+            st.setString(2, ID);
+
+            st.executeUpdate();
+            st.close();
+
+        } catch(Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
+    @Override
+    public void changeRank(String ID, String newRank) throws Exception {
+        Connection con = null;
+        PreparedStatement st = null;
+        ResultSet rs = null;
+
+        try {
+            con = db.getConnection();
+
+            String sql = "UPDATE users SET ranking = ? WHERE id = ?";
+
+            st = con.prepareStatement(sql);
+            st.setString(1, newRank);
+            st.setString(2, ID);
+
+            st.executeUpdate();
+            st.close();
+
+        } catch(Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
+    @Override
+    public void removeEvent(int ID) throws Exception {
+        Connection con = null;
+        PreparedStatement st = null;
+        ResultSet rs = null;
+
+        try {
+            con = db.getConnection();
+
+            String sql = "DELETE FROM events WHERE id = ?";
+
+            st = con.prepareStatement(sql);
+            st.setInt(1, ID);
+
+            st.executeUpdate();
+            st.close();
+
+        } catch(Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
+    @Override
+    public void editEventCoefficient(int ID, double newCoefficient, short pick) throws Exception {
+        Connection con = null;
+        PreparedStatement st = null;
+        ResultSet rs = null;
+
+        String choice = "draw";
+        if(pick == 0){
+            choice = "win1";
+        } else if(pick == 1){
+            choice = "win2";
+        }
+
+        try {
+            con = db.getConnection();
+
+            String sql = "UPDATE events SET " + "coeff"+choice +" = ? WHERE id = ?";
+
+            st = con.prepareStatement(sql);
+            st.setDouble(1, newCoefficient);
+            st.setInt(2, ID);
+
+            st.executeUpdate();
+            st.close();
+
+        } catch(Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
+    @Override
+    public void editEventInfo(int ID, String newInfo, short pick) throws Exception{
+        Connection con = null;
+        PreparedStatement st = null;
+        ResultSet rs = null;
+
+        String choice = "firstplayer";
+        if(pick == 2){
+            choice = "secondplayer";
+        } else if(pick == 3){
+            choice = "dateofmatch";
+        } else if(pick == 4){
+            choice = "league";
+        } else if(pick == 5){
+            choice = "category";
+        } else if(pick == 6){
+            choice = "location";
+        }
+
+        try {
+            con = db.getConnection();
+
+            String sql = "UPDATE events SET " + choice + " = ? WHERE id = ?";
+
+            st = con.prepareStatement(sql);
+            st.setString(1, newInfo);
+            st.setInt(2, ID);
+
+            st.executeUpdate();
+            st.close();
+
+        } catch(Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
+    }
 }
