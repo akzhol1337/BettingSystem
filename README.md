@@ -1,31 +1,38 @@
-<h1>Betting System</h1>
+# Betting Service
+Betting Service is a place where users can risk a sum of money on the basis of the outcome of an unpredictable event. This project aims to manage data about bets using design patterns.
 
-<p>
-Store information about matches (playing teams, coefficient, date/live, number of bets, total money on match), store on Database(PostgreSQL) or XML/TXT file. 
 
-Adapter Pattern to adapt from external resource interface to interface in our code
+## Design Pattern Usage
 
-Singleton to create one global instance of database/file adapter
+* *Adapter* - to adapt from external resource interface to interface in our code
+* *Singleton* - to create one global instance of database/file adapter
+* *Observer* - used in admin class that stores all objects
+* *State* - to change the state of ranking
+* *Strategy* - used in making ordinary and express bets
+* *MVC Pattern* - is used to separate application's concerns.
 
----
 
-Create system of account, every account has his own ID, balance, etc.
 
-Observer pattern to notify user accounts from admin panel
+## TO RUN THIS PROJECT: 
+```Compile ->  javac -cp ".:./com/company/postgresql-42.3.1.jar" com/company/Main.java```
 
----
+```Run -> java -cp ".:./com/company/postgresql-42.3.1.jar" com/company/Main```
 
-User can make a bet.
+User: 
 
-There is two types of bets, Ordinary and express, two algorithms to make a bet
+email: ```nursultan@nu.edu.kz```
 
-Abstract pattern to make an object of express bet
+password: ```qwerty```
 
-Strategy pattern to define algorithms
+P.S Your directory should be ```src```. In other words, change your directory to ```src``` in the terminal.
 
----
+### Rules
+Users can make a bet.
 
-Every user has a ranking, defined by bets won
+There are two types of bets, Ordinary and express, two algorithms to make a bet.
 
-State pattern do give a personal ranking to every user
-</p>
+Every user has a ranking, defined by bets won.
+## Summary
+The main purpose of my project is to make it easy to manage patients and get information from database without any problem using design patterns.
+
+Hope this project will help to enhance the quality of the betting system.
